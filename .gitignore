@@ -2,3 +2,5 @@
 chroma_db/
 *.faiss
 .env
+
+__pycache__/
