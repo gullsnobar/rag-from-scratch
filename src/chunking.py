@@ -34,10 +34,12 @@ def recursive_chunks(text, max_size=800, separators=("\n\n", "\n", ". ", " ")):
     return fixed_size_chunks(text, max_size, 0)
 
 
-def chunk_documents(docs, strategy="recursive", size=800):
+def chunk_documents(docs, strategy="recursive", size=800, min_size=100):
     fn = recursive_chunks if strategy == "recursive" else fixed_size_chunks
     out = []
     for d in docs:
         for i, c in enumerate(fn(d["text"], size)):
+            if len(c.strip()) < min_size:   # drop fragments like lone URLs
+                continue
             out.append({"text": c, "source": d["source"], "chunk_id": f"{d['source']}-{i}"})
     return out
